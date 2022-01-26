@@ -1,11 +1,9 @@
-package java;
+package mytest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,5 +38,12 @@ public class MyTest {
             if (array[i] == target) return i;
         }
         return -1;
+    }
+
+    @Test
+    public void testChar() {
+        int n = 2;
+        char c = (char) (n + '0');
+        System.out.println(c == '2');
     }
 }
