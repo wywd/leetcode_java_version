@@ -50,19 +50,31 @@ public class L_714_BestTimeToBuyAndSellStockWithTransactionFee {
     }
     
 //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {  // 抄的，没想到贪心怎么做
+class Solution {
     public int maxProfit(int[] prices, int fee) {
-        int buy = prices[0] + fee;
-        int sum = 0;
-        for (int p : prices) {
-            if (p + fee < buy) {
-                buy = p + fee;
-            } else if (p > buy){
-                sum += p - buy;
-                buy = p;
-            }
+        // 贪心思路：抄的，没想到贪心怎么做
+//        int buy = prices[0] + fee;
+//        int sum = 0;
+//        for (int p : prices) {
+//            if (p + fee < buy) {
+//                buy = p + fee;
+//            } else if (p > buy){
+//                sum += p - buy;
+//                buy = p;
+//            }
+//        }
+//        return sum;
+        // 动态规划思路：
+        if (prices.length == 1) {
+            return 0;
         }
-        return sum;
+        int[] dp = new int[2]; // 状态：买入，卖出
+        dp[0] = -prices[0] - fee;
+        for (int i = 1; i < prices.length; i++) {
+            dp[0] = Math.max(dp[0], dp[1] - prices[i] - fee);
+            dp[1] = Math.max(dp[1], dp[0] + prices[i]);
+        }
+        return dp[1];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

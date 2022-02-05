@@ -57,18 +57,20 @@ public class L_53_MaximumSubarray {
 // 如果temp比0小了，那么就要消除前面的影响，temp重新开始
 class Solution {
     public int maxSubArray(int[] nums) {
-        int max = Integer.MIN_VALUE;
-        int temp = 0;
-        for (int i = 0; i < nums.length; i++) {
-            temp += nums[i];
-            if (temp > max) {
-                max = temp;
-            }
-            if (temp < 0) {
-                temp = 0;
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        // 递归的思路：
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i-1] + nums[i], nums[i]);
+            if (dp[i] > res) {
+                res = dp[i];
             }
         }
-        return max;
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

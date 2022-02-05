@@ -56,6 +56,7 @@ public class L_122_BestTimeToBuyAndSellStockIi {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int maxProfit(int[] prices) {
+        // 贪心1
 //        int res = 0;
 //        int pre = 0;
 //        int cur = 0;
@@ -68,12 +69,42 @@ class Solution {
 //        }
 //        res += prices[cur] - prices[pre];
 //        return res;
-        // 更简单的思路：
-        int res = 0;
-        for (int i = 1; i < prices.length; i++) {
-            res += Math.max(prices[i] - prices[i-1], 0);
+        // 更简单的思路（贪心2）：
+//        int res = 0;
+//        for (int i = 1; i < prices.length; i++) {
+//            res += Math.max(prices[i] - prices[i-1], 0);
+//        }
+//        return res;
+        // 动态规划
+//        if (prices.length == 1) {
+//            return 0;
+//        }
+////        dp[i][0] 表示第i天持有股票所得现金。
+////        dp[i][1] 表示第i天不持有股票所得最多现金
+//        int[][] dp = new int[prices.length][2];  // 第i天是否持有股票,位置0是持有股票，位置1是不持有股票，获得的最大收益
+//        dp[0][0] = -prices[0];
+//        dp[0][1] = 0;
+//        for (int i = 1; i < prices.length; i++) {
+//            //第i天持有股票的最大收益，两种可能：之前就持有股票，之前不持有股票了今天买入的
+//            dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] - prices[i]);
+//            //第i天不持有股票的最大收益，两种可能：之前就不持有股票，今天卖出的
+//            dp[i][1] = Math.max(dp[i-1][1], dp[i-1][0] + prices[i]);
+//        }
+//        return dp[prices.length-1][1];
+        // 动态规划2-滚动数组[优化空间]
+        if (prices.length == 1) {
+            return 0;
         }
-        return res;
+        int[] dp = new int[2];  // 第i天是否持有股票,位置0是持有股票，位置1是不持有股票，获得的最大收益
+        dp[0] = -prices[0];
+        dp[1] = 0;
+        for (int i = 1; i < prices.length; i++) {
+            //第i天持有股票的最大收益，两种可能：之前就持有股票，之前不持有股票了今天买入的
+            dp[0] = Math.max(dp[0], dp[1] - prices[i]);
+            //第i天不持有股票的最大收益，两种可能：之前就不持有股票，今天卖出的
+            dp[1] = Math.max(dp[1], dp[0] + prices[i]);
+        }
+        return dp[1];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
