@@ -64,8 +64,8 @@ public class MyTest {
 
     @Test
     public void test4() {
-        int[] weight = {1, 3, 4};
-        int[] value = {15, 20, 30};
+        int[] weight = {3, 1, 4};
+        int[] value = {20, 15, 30};
         int bagSize = 4;
         testWeightBagProblem(weight, value, bagSize);
     }
@@ -134,4 +134,5 @@ public class MyTest {
         int x = (int) Math.sqrt(12);
         System.out.println(x);
     }
+
 }

@@ -69,7 +69,6 @@ public class L_39_CombinationSum {
         List<List<Integer>> res = solution.combinationSum(new int[]{2,7,6,3,5,1}, 9);
         System.out.println(res);
     }
-    
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     List<List<Integer>> res = new ArrayList<>();

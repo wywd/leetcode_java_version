@@ -70,53 +70,40 @@ import java.util.List;
 public class L_93_RestoreIpAddresses {
     public static void main(String[] args) {
         Solution solution = new L_93_RestoreIpAddresses().new Solution();
-        List<String> res = solution.restoreIpAddresses("1111");
-        System.out.println(res);
     }
     
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     List<String> res = new ArrayList<>();
+    Deque<String> temp = new LinkedList<>();
     public List<String> restoreIpAddresses(String s) {
         if (s.length() < 4 || s.length() > 12) {
             return res;
         }
-        helper(new StringBuilder(s), 0, 0);
+        helper(s, 0);
         return res;
     }
 
-    void helper(StringBuilder sb, int startIndex, int pointNum) {  // k代表分割次数
-        if (pointNum == 3) {
-            if (isValid(sb.substring(startIndex, sb.length()))) {
-                res.add(sb.toString());
+    void helper(String s, int startIndex) {  // k代表分割次数
+        if (temp.size() == 4) {
+            if (startIndex == s.length()) {
+                res.add(String.join(".", temp));
             }
             return;
         }
-
-        for (int i = startIndex; i < sb.length(); i++) {
-            if (isValid(sb.substring(startIndex, i+1))) {
-                sb.insert(i+1, '.');
-                helper(sb, i+2, pointNum+1);
-                sb.deleteCharAt(i+1); // 回溯
+        for (int i = startIndex; i < s.length(); i++) {
+            String sub = s.substring(startIndex, i+1);
+            if (Integer.parseInt(sub) > 255 || sub.startsWith("0") && sub.length() > 1) {
+                return;
             } else {
-                break;
+                temp.add(sub);
+                helper(s, i+1);
+                temp.removeLast();
             }
         }
     }
-
-    boolean isValid(String str) {  // 判断ip段是否合法
-        if (str == null || str.length() == 0) {
-            return false;
-        }
-        if (str.startsWith("0") && str.length() > 1) {
-            return false;
-        }
-        if (Integer.parseInt(str) > 255) {
-            return false;
-        }
-        return true;
-    }
 }
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 

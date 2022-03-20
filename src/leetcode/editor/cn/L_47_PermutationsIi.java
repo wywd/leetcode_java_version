@@ -39,41 +39,35 @@ import java.util.*;
 public class L_47_PermutationsIi {
     public static void main(String[] args) {
         Solution solution = new L_47_PermutationsIi().new Solution();
+        System.out.println(solution.permuteUnique(new int[]{1, 1, 2}));
     }
-    
+
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     List<List<Integer>> res = new ArrayList<>();
-    Deque<Integer> path = new LinkedList<>();
-    boolean[] used;
+    List<Integer> path = new ArrayList<>();
+    int[] pathUsed = new int[21];
     public List<List<Integer>> permuteUnique(int[] nums) {
-        Arrays.sort(nums);  // 排序，用于同一层中不重复
-        used = new boolean[nums.length];
-        helper(nums, used);
+        helper(nums);
         return res;
     }
 
-    void helper(int[] nums, boolean[] used) {
+    private void helper(int[] nums) {
         if (path.size() == nums.length) {
             res.add(new ArrayList<>(path));
             return;
         }
-//        boolean[] layerUsed=  new boolean[21];
+        int[] used = new int[21];
         for (int i = 0; i < nums.length; i++) {
-//            if (used[i] || layerUsed[nums[i] + 10]) {  // 保证同一路径下不重复 且 同一层不重复使用相同元素
-//                continue;
-//            }
-//            layerUsed[nums[i] + 10] = true;
-            if (i > 0 && nums[i] == nums[i-1] && !used[i - 1]) {
+            if (used[nums[i] + 10] == 1 || pathUsed[nums[i] + 10] == 1) {
                 continue;
             }
-            if (!used[i]) {
-                path.add(nums[i]);
-                used[i] = true;
-                helper(nums, used);
-                used[i] = false;
-                path.removeLast();
-            }
+            used[nums[i] + 10] = 1;
+            path.add(nums[i]);
+            pathUsed[nums[i] + 10] = 1;
+            helper(nums);
+            pathUsed[nums[i] + 10] = 0;
+            path.remove(path.size() - 1);
         }
     }
 }

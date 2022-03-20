@@ -52,9 +52,16 @@ public class L_332_ReconstructItinerary {
         Solution solution = new L_332_ReconstructItinerary().new Solution();
         List<List<String>> tickets = new ArrayList<>(){
             {
-                add(new ArrayList<>() {{add("JFK"); add("KUL");}});
-                add(new ArrayList<>() {{add("JFK"); add("NRT");}});
-                add(new ArrayList<>() {{add("NRT"); add("JFK");}});
+                add(new ArrayList<>() {{add("EZE"); add("AXA");}});
+                add(new ArrayList<>() {{add("TIA"); add("ANU");}});
+                add(new ArrayList<>() {{add("ANU"); add("JFK");}});
+                add(new ArrayList<>() {{add("JFK"); add("ANU");}});
+                add(new ArrayList<>() {{add("ANU"); add("EZE");}});
+                add(new ArrayList<>() {{add("TIA"); add("ANU");}});
+                add(new ArrayList<>() {{add("AXA"); add("TIA");}});
+                add(new ArrayList<>() {{add("TIA"); add("JFK");}});
+                add(new ArrayList<>() {{add("ANU"); add("TIA");}});
+                add(new ArrayList<>() {{add("JFK"); add("TIA");}});
             }
         };
         List<String> res = solution.findItinerary(tickets);
@@ -62,47 +69,44 @@ public class L_332_ReconstructItinerary {
     }
     
 //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {  // 利用回溯的思想去解决这个问题，不过我们的递归函数不再是void而是boolean，因为我们只需要找到一条最优行程
-    List<String> res = new ArrayList<>();  // TreeMap可以保持key是升序的
-    Map<String, TreeMap<String, Integer>> map = new HashMap<>();
+class Solution {
+    List<String> res = new ArrayList<>();
+    Map<String, TreeMap<String, Boolean>> map = new HashMap<>();
     public List<String> findItinerary(List<List<String>> tickets) {
-        //比如: [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
-        for (List<String> ticket : tickets) {
+        for (List<String> ticket: tickets) {
             String from = ticket.get(0);
             String to = ticket.get(1);
             map.putIfAbsent(from, new TreeMap<>());
-            TreeMap<String, Integer> treeMap = map.get(from);
-            treeMap.put(to, treeMap.getOrDefault(to, 0) + 1);
+            map.get(from).put(to, false);
         }
         res.add("JFK");
-        helper(tickets);
+        helper(tickets, "JFK");
         return res;
     }
 
-    boolean helper(List<List<String>> tickets) {
-        if (res.size() == tickets.size() + 1) {  // 表示找到了最优行程
+    boolean helper(List<List<String>> tickets, String from) {
+        if (res.size() == tickets.size() + 1) {  // 找到了最有行程
             return true;
         }
-        TreeMap<String, Integer> tos = map.get(res.get(res.size()-1));
-        if (tos == null || tos.isEmpty()) return false;
-        for (String str: tos.keySet()) {
-            if (tos.get(str) == 0) continue;  // 表示当前车票已经使用了
-
-            // 加入了res，需要把这个车票数目-1
-            res.add(str);
-            tos.put(str, tos.get(str) - 1);
-
-            if (helper(tickets)) return true;  // 如果找到了行程直接返回True，因为我们只需要找一个最优解
-
-            // 否则回溯
-            res.remove(res.size()-1);
-            tos.put(str, tos.get(str) + 1);
+        TreeMap<String, Boolean> tree = map.get(from);
+        if (tree == null || tree.isEmpty()) {  // 不存在from为出发点的路程
+            return false;
         }
-
+        for (String to: tree.keySet()) {
+            if (tree.get(to)) { // 表示当前车票已经被用了
+                continue;
+            }
+            res.add(to);
+            tree.put(to, true);
+            if (helper(tickets, to)) {  // 如果找到最优的就返回true
+                return true;
+            }
+            // 否则回溯
+            res.remove(res.size() - 1);
+            tree.put(to, false);
+        }
         return false;
     }
-
-
 }
 //leetcode submit region end(Prohibit modification and deletion)
 

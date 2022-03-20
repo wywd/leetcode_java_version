@@ -33,54 +33,90 @@
 
 package leetcode.editor.cn;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class L_131_PalindromePartitioning {
     public static void main(String[] args) {
         Solution solution = new L_131_PalindromePartitioning().new Solution();
-        System.out.println(solution.check("ab", 0, 1));
+        System.out.println(solution.partition("aba"));
+        System.out.println(new String(new char[]{'a', 'b', 'c', 'd'}, 0, 3));
     }
     
 //leetcode submit region begin(Prohibit modification and deletion)
+//class Solution {
+//    List<List<String>> res = new ArrayList<>();
+//    Deque<String> temp = new LinkedList<>();
+//    public List<List<String>> partition(String s) {
+//        helper(s, 0);
+//        return res;
+//    }
+//
+//    void helper(String s, int startIndex) {
+//        if (startIndex >= s.length()) {
+//            res.add(new ArrayList<>(temp));
+//            return;
+//        }
+//        for (int i = startIndex; i < s.length(); i++) {
+//            if (i - startIndex == 0 || check(s, startIndex, i)) {  // 当前分割有效
+//                String subStr = s.substring(startIndex, i+1);
+//                 temp.add(subStr);
+//            } else {
+//                continue;
+//            }
+//            helper(s, i + 1);
+//            temp.removeLast();
+//        }
+//    }
+//
+//    boolean check(String s, int begin, int end) {
+//        while (begin < end) {
+//            if (s.charAt(begin) != s.charAt(end)) {
+//                return false;
+//            }
+//            begin++;
+//            end--;
+//        }
+//        return true;
+//    }
+//}
 class Solution {
     List<List<String>> res = new ArrayList<>();
-    Deque<String> temp = new LinkedList<>();
+    List<String> path = new ArrayList<>();
     public List<List<String>> partition(String s) {
         helper(s, 0);
         return res;
     }
 
-    void helper(String s, int startIndex) {
-        if (startIndex >= s.length()) {
-            res.add(new ArrayList<>(temp));
-            return;
+    public void helper(String s, int startIndex) {  // 回溯方法
+        if (startIndex == s.length()) {
+            res.add(new ArrayList<>(path));
         }
-        for (int i = startIndex; i < s.length(); i++) {
-            if (i - startIndex == 0 || check(s, startIndex, i)) {  // 当前分割有效
-                String subStr = s.substring(startIndex, i+1);
-                 temp.add(subStr);
-            } else {
+        for (int i = startIndex + 1; i <= s.length(); i++) {
+            String sub = s.substring(startIndex, i);
+            if (!check(sub)) {
                 continue;
             }
-            helper(s, i + 1);
-            temp.removeLast();
+            path.add(sub);
+            helper(s, i);
+            path.remove(path.size() - 1);
         }
     }
 
-    boolean check(String s, int begin, int end) {
-        while (begin < end) {
-            if (s.charAt(begin) != s.charAt(end)) {
+    public boolean check(String s) {  // 检测是否为回文串
+        int left = 0;
+        int right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
                 return false;
             }
-            begin++;
-            end--;
+            left++;
+            right--;
         }
         return true;
     }
 }
+
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 
