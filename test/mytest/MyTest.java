@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -131,8 +133,7 @@ public class MyTest {
 
     @Test
     public void test6() {
-        int x = (int) Math.sqrt(12);
-        System.out.println(x);
+
     }
 
 }
