@@ -17,6 +17,7 @@ public class T_24_两两交换链表中的节点 {
 
     }
 
+    // 迭代的思路
     public ListNode swapPairs(ListNode head) {
         ListNode dummy = new ListNode(-1, head);  // 链表的题目一定要考虑虚拟节点
         ListNode pre = dummy;  // 前一个节点
@@ -30,5 +31,17 @@ public class T_24_两两交换链表中的节点 {
             p = temp;
         }
         return dummy.next;
+    }
+
+    // 递归的思路
+    public ListNode swapPairs2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode tmp = swapPairs2(head.next.next);
+        ListNode cur = head.next;
+        head.next = tmp;
+        cur.next = head;
+        return cur;
     }
 }
